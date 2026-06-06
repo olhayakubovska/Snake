@@ -1,24 +1,22 @@
-import GameInstance from "./gameInstance.js";
 import Config from "./config.js";
 
 export default class GameLoop {
-  constructor(update, draw, pixi) {
+  constructor(update, draw, pixi, config = new Config()) {
     this.update = update;
     this.draw = draw;
     this.pixi = pixi;
-    this.gameInstance = new GameInstance();
+    this.config = config;
     this.animate = this.animate.bind(this);
     this.animate();
   }
 
   animate() {
-    const configInstance = this.gameInstance.getInstanceConfig();
     this.pixi.app.ticker.add((delta) => {
-      configInstance.step += 1;
-      if (configInstance.step < Config.MAX_STEP) {
+      this.config.step += 1;
+      if (this.config.step < this.config.maxStep) {
         return;
       }
-      configInstance.step = 0;
+      this.config.step = 0;
 
       this.update();
       this.draw();
